@@ -1,0 +1,52 @@
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=NBPAPI;User=sa;Password=YourStrongP@ssw0rd123;
+    networks:
+      - app-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourStrongP@ssw0rd123"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - sql_data:/var/opt/mssql
+      - ./database:/docker-entrypoint-initdb.d
+    command: >
+      bash -c "
+      /opt/mssql/bin/sqlservr & 
+      sleep 15 &&
+      /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrongP@ssw0rd123 -C -i /docker-entrypoint-initdb.d/init.sql &&
+      wait
+      "
+    networks:
+      - app-network
+
+volumes:
+  sql_data:
+
+networks:
+  app-network:

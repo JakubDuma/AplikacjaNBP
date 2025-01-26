@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Exchange Rate History</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body ng-app="currencyApp" ng-controller="CurrencyController">
+
+  <div>
+    <h1>Currency Exchange Rate History</h1>
+
+    <label for="table">Select Table:</label>
+    <select id="table" ng-model="selectedTable" ng-change="onTableChange()" ng-options="table for table in tables">
+      <option value="">Select table</option>
+    </select>
+    <!-- Dropdown dla walut -->
+    <label for="currency">Select Currency:</label>
+    <select id="currency" ng-model="selectedCurrency" ng-change="onCurrencyChange()" ng-options="currency.code as currency.currency for currency in currencies">
+      <option value="">Select currency</option>
+    </select>
+
+    <!-- Wybór dat -->
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" ng-model="startDate">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" ng-model="endDate">
+
+    <button ng-click="fetchCurrencyHistory()">Show Currency History</button>
+    
+
+    <!-- Wyświetlanie wykresu -->
+    <canvas id="currencyChart" width="400" height="200"></canvas>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/CurrencyController.js"></script>
+  <script src="js/services/CurrencyService.js"></script>
+</body>
+</html>

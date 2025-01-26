@@ -1,0 +1,6 @@
+@NbpAPI_HostAddress = http://localhost:5276
+
+GET {{NbpAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
